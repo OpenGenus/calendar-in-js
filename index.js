@@ -1,26 +1,21 @@
 import months from './modules/months.js';
 import daysOfWeek from './modules/daysOfWeek.js';
 
-const yearSpan = document.getElementById('year-span');
 const monthSpan = document.getElementById('month-span');
 const yearInput = document.getElementById('year');
 const currentYear = new Date().getFullYear();
 const currentDay = new Date().getDay();
-const currentDate = new Date().getDate();
-const daysContainer = document.getElementById('days');
 const mainContainer = document.getElementById('table');
-let year = currentYear;
 
 // Select a year
 yearInput.addEventListener('change', () => {
-  yearSpan.textContent = yearInput.value;
   setDays();
 });
 
 // Set current year as default value
 yearInput.value = currentYear;
-yearSpan.textContent = yearInput.value;
 
+// Create 12 tables
 months.forEach((month) => {
   const div = document.createElement('div');
   div.innerHTML = ` <table>
@@ -34,7 +29,7 @@ months.forEach((month) => {
     </tr>
     <tr id=${month} class="weeksContainer"></tr>
   </thead>
-  <tbody class="daysContainer"></tbody>
+  <tbody id=${month}-days class="daysContainer"></tbody>
 </table>`;
 
   mainContainer.appendChild(div);
@@ -47,6 +42,23 @@ months.forEach((month) => {
     dayHeader.setAttribute('class', 'week');
     weekRow.appendChild(dayHeader);
   });
+
+  // Create days
+  const daysContainer = document.getElementById(`${month}-days`);
+  let daysId = 0;
+
+  for (let i = 0; i < 5; i++) {
+    const week = document.createElement('tr');
+    for (let j = 0; j < 7; j++) {
+      daysId++;
+      const day = document.createElement('td');
+      day.setAttribute('class', 'days');
+      day.setAttribute('id', `${daysId}`);
+      week.appendChild(day);
+    }
+    daysContainer.appendChild(week);
+  }
+  //setDaysText();
 });
 
 // Set days text
@@ -101,38 +113,6 @@ const setDaysText = () => {
 
   for (let x = 1; x <= Number(lastDay); x++) {
     document.getElementById(`${startDay + 1}`).textContent = daysCount++;
-    if (
-      Number(document.getElementById(`${startDay + 1}`).textContent) ===
-      currentDate
-    ) {
-      const curr = document.getElementById(`${startDay + 1}`);
-      curr.style.background = '#e5e3c9';
-      curr.style.borderRadius = '10px';
-      curr.style.display = 'flex';
-      curr.style.justifyContent = 'center';
-      curr.style.alignItems = 'center';
-      curr.style.color = '#BB6464';
-    }
     startDay++;
   }
 };
-
-// Create days
-const setDays = () => {
-  daysContainer.innerHTML = '';
-  let daysId = 0;
-
-  for (let i = 0; i < 5; i++) {
-    const week = document.createElement('tr');
-    for (let j = 0; j < 7; j++) {
-      daysId++;
-      const day = document.createElement('td');
-      day.setAttribute('class', 'days');
-      day.setAttribute('id', `${daysId}`);
-      week.appendChild(day);
-    }
-    daysContainer.appendChild(week);
-  }
-  setDaysText();
-};
-setDays();
