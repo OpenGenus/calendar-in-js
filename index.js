@@ -1,29 +1,48 @@
 import months from './modules/months.js';
 import daysOfWeek from './modules/daysOfWeek.js';
 
-const monthSpan = document.getElementById('month-span');
 const yearInput = document.getElementById('year');
 const currentYear = new Date().getFullYear();
-const currentDay = new Date().getDay();
 const mainContainer = document.getElementById('table');
+let year;
 
 // Select a year
 yearInput.addEventListener('change', () => {
-  setDays();
+  year = yearInput.value;
 });
 
 // Set current year as default value
 yearInput.value = currentYear;
+year = yearInput.value;
+
+const createDays = (month) => {
+  const daysContainer = document.getElementById(`${month}-days`);
+  let daysId = 0;
+  for (let i = 0; i < 5; i++) {
+    const week = document.createElement('tr');
+    week.style.border = 'solid black';
+    week.style.height = '50px';
+    for (let j = 0; j < 7; j++) {
+      const day = document.createElement('td');
+      day.setAttribute('class', 'days');
+      day.setAttribute('id', `${month}-${daysId++}`);
+      day.style.border = 'solid black';
+      week.appendChild(day);
+    }
+    daysContainer.appendChild(week);
+  }
+};
 
 // Create 12 tables
 months.forEach((month) => {
   const div = document.createElement('div');
+  div.setAttribute('class', 'calendars');
   div.innerHTML = ` <table>
   <thead>
     <tr>
       <th class="year-display" colspan="7">
         <p>
-          <span class="month-span">${month}</span>
+          <span id=${month}-span class="month-span">${month}</span>
         </p>
       </th>
     </tr>
@@ -42,46 +61,20 @@ months.forEach((month) => {
     dayHeader.setAttribute('class', 'week');
     weekRow.appendChild(dayHeader);
   });
-
-  // Create days
-  const daysContainer = document.getElementById(`${month}-days`);
-  let daysId = 0;
-
-  for (let i = 0; i < 5; i++) {
-    const week = document.createElement('tr');
-    for (let j = 0; j < 7; j++) {
-      daysId++;
-      const day = document.createElement('td');
-      day.setAttribute('class', 'days');
-      day.setAttribute('id', `${daysId}`);
-      week.appendChild(day);
-    }
-    daysContainer.appendChild(week);
-  }
-  //setDaysText();
+  createDays(month);
 });
 
-// Set days text
-const setDaysText = () => {
+const setDays = (month) => {
   // Get first day of month
-  const firstDay = new Date(
-    Number(yearSpan.textContent),
-    months.indexOf(monthSpan.textContent),
-    1
-  )
+  const firstDay = new Date(year, months.indexOf(month), 1)
     .toDateString()
     .split(' ')[0];
 
   // Get last day of month
-  const lastDay = new Date(
-    Number(yearSpan.textContent),
-    months.indexOf(monthSpan.textContent) + 1,
-    0
-  )
+  const lastDay = new Date(year, months.indexOf(month) + 1, 0)
     .toDateString()
     .split(' ')[2];
-
-  let startDay = currentDay;
+  let startDay;
 
   switch (firstDay) {
     case 'Sun':
@@ -110,9 +103,16 @@ const setDaysText = () => {
   }
 
   let daysCount = 1;
-
   for (let x = 1; x <= Number(lastDay); x++) {
-    document.getElementById(`${startDay + 1}`).textContent = daysCount++;
+    const d = document.getElementById(`${month}-${startDay + 1}`);
+
+    d.textContent = daysCount++;
     startDay++;
   }
 };
+
+setDays('January');
+setDays('February');
+setDays('March');
+setDays('April');
+setDays('May');
