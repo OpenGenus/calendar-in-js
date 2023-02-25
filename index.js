@@ -13,7 +13,6 @@ const currentYear = new Date().getFullYear();
 const currentDay = new Date().getDay();
 const currentDate = new Date().getDate();
 const daysContainer = document.getElementById('days');
-const errorMessage = document.getElementById('error');
 
 // Create the days of the week
 daysOfWeek.forEach((day) => {
@@ -36,19 +35,8 @@ months.forEach((month) => {
 
 // Select a year
 yearInput.addEventListener('change', () => {
-  if (yearInput.value === '') {
-    errorMessage.textContent =
-      'Please, enter a year between 1970-2100. Field can not be empty.';
-  } else if (yearInput.value.length !== 4) {
-    errorMessage.textContent =
-      'Please, enter a year between 1970-2100.\nYear must be 4 digits long.';
-  } else if (yearInput.value > 2100 || yearInput.value < 1970) {
-    errorMessage.textContent = 'Please, enter a year between 1970-2100.';
-  } else {
-    errorMessage.textContent = '';
-    yearSpan.textContent = yearInput.value;
-    setDays();
-  }
+  yearSpan.textContent = yearInput.value;
+  setDays();
 });
 
 // Set current year as default value
@@ -57,7 +45,6 @@ yearSpan.textContent = yearInput.value;
 
 // Select a month
 monthInput.addEventListener('change', () => {
-  errorMessage.textContent = '';
   monthSpan.textContent = monthInput.value;
   setDays();
 });
@@ -67,7 +54,6 @@ monthSpan.textContent = monthInput.value;
 
 // Get previous month
 previousArrowBtn.addEventListener('click', () => {
-  errorMessage.textContent = '';
   yearSpan.textContent =
     monthSpan.textContent === 'January'
       ? Number(yearSpan.textContent) - 1
@@ -81,7 +67,6 @@ previousArrowBtn.addEventListener('click', () => {
 
 // Get next month
 nextArrowBtn.addEventListener('click', () => {
-  errorMessage.textContent = '';
   yearSpan.textContent =
     monthSpan.textContent === 'December'
       ? Number(yearSpan.textContent) + 1
