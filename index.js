@@ -15,10 +15,11 @@ yearInput.addEventListener('change', () => {
 yearInput.value = currentYear;
 year = yearInput.value;
 
+// Create the days of the month
 const createDays = (month) => {
   const daysContainer = document.getElementById(`${month}-days`);
-  let daysId = 0;
-  for (let i = 0; i < 5; i++) {
+  let daysId = 1;
+  for (let i = 0; i < 6; i++) {
     const week = document.createElement('tr');
     week.style.border = 'solid black';
     week.style.height = '50px';
@@ -33,37 +34,7 @@ const createDays = (month) => {
   }
 };
 
-// Create 12 tables
-months.forEach((month) => {
-  const div = document.createElement('div');
-  div.setAttribute('class', 'calendars');
-  div.innerHTML = ` <table>
-  <thead>
-    <tr>
-      <th class="year-display" colspan="7">
-        <p>
-          <span id=${month}-span class="month-span">${month}</span>
-        </p>
-      </th>
-    </tr>
-    <tr id=${month} class="weeksContainer"></tr>
-  </thead>
-  <tbody id=${month}-days class="daysContainer"></tbody>
-</table>`;
-
-  mainContainer.appendChild(div);
-
-  // Create the days of the week
-  const weekRow = document.getElementById(`${month}`);
-  daysOfWeek.forEach((day) => {
-    const dayHeader = document.createElement('th');
-    dayHeader.textContent = day;
-    dayHeader.setAttribute('class', 'week');
-    weekRow.appendChild(dayHeader);
-  });
-  createDays(month);
-});
-
+// Set the number of the days
 const setDays = (month) => {
   // Get first day of month
   const firstDay = new Date(year, months.indexOf(month), 1)
@@ -111,8 +82,34 @@ const setDays = (month) => {
   }
 };
 
-setDays('January');
-setDays('February');
-setDays('March');
-setDays('April');
-setDays('May');
+// Create 12 tables
+months.forEach((month) => {
+  const div = document.createElement('div');
+  div.setAttribute('class', 'calendars');
+  div.innerHTML = ` <table>
+  <thead>
+    <tr>
+      <th class="year-display" colspan="7">
+        <p>
+          <span id=${month}-span class="month-span">${month}</span>
+        </p>
+      </th>
+    </tr>
+    <tr id=${month} class="weeksContainer"></tr>
+  </thead>
+  <tbody id=${month}-days class="daysContainer"></tbody>
+</table>`;
+
+  mainContainer.appendChild(div);
+
+  // Create the days of the week
+  const weekRow = document.getElementById(`${month}`);
+  daysOfWeek.forEach((day) => {
+    const dayHeader = document.createElement('th');
+    dayHeader.textContent = day;
+    dayHeader.setAttribute('class', 'week');
+    weekRow.appendChild(dayHeader);
+  });
+  createDays(month);
+  setDays(month);
+});
